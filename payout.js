@@ -13,11 +13,11 @@ async function load(){
  if(error)throw error;
  const {data:requests,error:reqError}=await supabase.from("payout_requests").select("id,account_id,gross_amount,trader_amount,status,requested_at,payment_reference").eq("user_id",session.user.id).order("requested_at",{ascending:false});
  if(reqError)throw reqError;
- const reserved={};for(const r of (requests||[]))if(["pending","approved"].includes(r.status))reserved[r.account_id]=(reserved[r.account_id]||0)+Number(r.gross_amount);
+ const {data:certs,error:certError}=await supabase.from("payout_certificates").select("id,payout_request_id").eq("user_id",session.user.id);\n if(certError)throw certError;\n const certByRequest=Object.fromEntries((certs||[]).map(c=>[c.payout_request_id,c]));\n const reserved={};for(const r of (requests||[]))if(["pending","approved"].includes(r.status))reserved[r.account_id]=(reserved[r.account_id]||0)+Number(r.gross_amount);
  accounts=(rows||[]).map(a=>({...a,available:Math.max(0,Number(a.current_balance||0)-Number(a.initial_balance||0)-(reserved[a.id]||0))}));
  $("fundedAccount").innerHTML='<option value="">Select active funded account</option>'+accounts.map(a=>'<option value="'+a.id+'">$'+Number(a.account_size).toLocaleString()+" · "+esc(a.model)+" · "+a.id.slice(0,8)+"</option>").join("");
  if(!accounts.length)$("fundedAccount").innerHTML='<option value="">No active funded account found</option>';
- $("payoutHistory").querySelector("tbody").innerHTML=(requests||[]).length?requests.map(r=>'<tr><td>'+new Date(r.requested_at).toLocaleDateString()+'</td><td>'+money(r.gross_amount)+'</td><td>'+money(r.trader_amount)+'</td><td><span class="status-pill status-'+esc(r.status)+'">'+esc(r.status)+'</span></td><td>'+esc(r.payment_reference||"—")+'</td></tr>').join(""):'<tr><td colspan="5">No payout requests yet.</td></tr>';
+ $("payoutHistory").querySelector("tbody").innerHTML=(requests||[]).length?requests.map(r=>'<tr><td>'+new Date(r.requested_at).toLocaleDateString()+'</td><td>'+money(r.gross_amount)+'</td><td>'+money(r.trader_amount)+'</td><td><span class="status-pill status-'+esc(r.status)+'">'+esc(r.status)+'</span></td><td>'+esc(r.payment_reference||"—")+'</td><td>'+(certByRequest[r.id]?'<a href="certificate.html?id='+encodeURIComponent(certByRequest[r.id].id)+'">View certificate ↗</a>':(r.status==="paid"?"Preparing certificate…":"—"))+'</td></tr>').join(""):'<tr><td colspan="6">No payout requests yet.</td></tr>';
 }
 $("payoutForm").addEventListener("submit",async e=>{
  e.preventDefault();if(!selected){message("Choose an active funded account first.",true);return;}
