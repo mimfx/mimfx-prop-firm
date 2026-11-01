@@ -101,7 +101,7 @@ def ohlc(symbol):
         response.raise_for_status()
         payload = response.json()
         bars = payload.get("bars") if isinstance(payload, dict) else None
-        if payload.get("symbol", "").upper() != symbol or not isinstance(bars, list):
+        if not isinstance(payload, dict) or payload.get("symbol", "").upper() != symbol or not isinstance(bars, list):
             raise ValueError("Unexpected candle response")
         clean_bars = []
         for bar in bars:
