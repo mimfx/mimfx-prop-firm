@@ -1,5 +1,5 @@
 const sizes=[2500,5000,10000,15000,20000];
-const prices={"2500":{two:12,one:16},"5000":{two:19,one:25},"10000":{two:35,one:45},"15000":{two:52,one:67},"20000":{two:69,one:89}};
+const prices={"2500":{two:19,one:25},"5000":{two:26,one:35},"10000":{two:50,one:65},"15000":{two:78,one:100},"20000":{two:120,one:155}};
 const cards=[...document.querySelectorAll(".account-card")];
 const modelCards=[...document.querySelectorAll(".model-option")];
 let selected=20000,model="2-phase";
