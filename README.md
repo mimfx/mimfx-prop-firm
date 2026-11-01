@@ -1,26 +1,43 @@
-# MIM FX PROP
+# NEXORA FUNDING
 
-A responsive front-end prototype for a forex prop-challenge platform, using the MIM FX dark green, black, and gold visual identity.
+A responsive front-end prototype for a trading challenge platform, with a Supabase-backed trader registration and sign-in foundation.
 
-## What's included
+## Included
 
-- Responsive marketing site and challenge preview cards
-- Draft risk-rule explainer
-- Trader dashboard mockup clearly marked as illustrative
-- MT5 integration status and FAQ
+- Responsive NEXORA FUNDING marketing website
+- Five account-size previews: $5,000, $10,000, $20,000, $50,000 and $100,000
+- Trader registration, email/password sign-in, password reset and sign-out
+- Supabase Auth session handling
+- Private trader profile table protected by Row Level Security
+- Trader dashboard prototype with illustrative balances and draft rules
 - Netlify static-site configuration
 
-## Deploy free with Netlify
+## Backend
 
-1. Sign in to Netlify and choose **Add new site → Import an existing project**.
-2. Connect GitHub and select `mimfx/mimfx-prop-firm`.
-3. Leave the build command empty and set the publish directory to `.`.
-4. Deploy.
+The separate Supabase project is NEXORA FUNDING (jklmzkmankwnrlcgbtsa).
 
-The included `netlify.toml` sets the publish directory to the repository root.
+The browser uses only the Supabase publishable key. No service-role or secret key is stored in this repository.
+
+The profiles table is protected by RLS. Traders can read and update only their own profile. A database trigger creates the profile after Supabase Auth creates a user.
+
+## Before testing email authentication on the deployed site
+
+In Supabase Dashboard → Authentication → URL Configuration:
+
+1. Set the Site URL to the deployed Netlify site URL.
+2. Add the deployed site URL and https://YOUR-SITE.netlify.app/** to Redirect URLs.
+3. Keep email confirmation enabled for public registration.
+4. For production email delivery, configure a trusted custom SMTP provider.
+
+## Deploy with Netlify
+
+1. Import mimfx/mimfx-prop-firm from GitHub.
+2. Leave the build command empty.
+3. Set the publish directory to .
+4. Deploy the site.
 
 ## Important status
 
-This repository is a front-end prototype only. No login/authentication, payment checkout, live market data, MT5 server, broker connection, challenge evaluation engine, or payout processing is implemented. Values and chart graphics are illustrative and must not be represented as live results.
+Authentication and private trader profiles are implemented, but this is not yet an operating prop firm. Account sizes and dashboard figures are previews only. There is no checkout, purchased challenge provisioning, MT5/broker connection, live trade ingestion, automated drawdown enforcement, payout processing or admin operations yet.
 
-Before accepting challenge fees or offering simulated-funded rewards, choose a suitable MT5 broker/server provider, implement and test server-side risk enforcement, protect secrets, publish final challenge terms, and obtain appropriate legal and compliance advice for the intended jurisdictions.
+Do not accept challenge fees or promise funded accounts or payouts until the trading-server integration, server-side risk engine, operational procedures, final challenge rules and legal/compliance review are complete.
