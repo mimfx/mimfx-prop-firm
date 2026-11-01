@@ -2,7 +2,7 @@ import { supabase } from "./supabase-config.js";
 const { data: { session } } = await supabase.auth.getSession();
 if (!session) { location.replace("auth.html"); throw new Error("Authentication required"); }
 const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", session.user.id).single();
-const firstName = profile?.full_name?.trim().split(/\\s+/)[0] || "Trader";
+const firstName = profile?.full_name?.trim().split(" ")[0] || "Trader";
 const avatar = document.getElementById("userAvatar");
 if (avatar) avatar.textContent = firstName.charAt(0).toUpperCase();
 const page = location.pathname.split("/").pop().replace(".html","");
