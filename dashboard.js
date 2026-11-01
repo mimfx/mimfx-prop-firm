@@ -1,29 +1,5 @@
-import { supabase } from "./supabase-config.js";
-
-const { data: { session } } = await supabase.auth.getSession();
-if (!session) {
-  location.replace("auth.html");
-  throw new Error("Authentication required");
-}
-
-const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", session.user.id).single();
-if (profile?.full_name) {
-  const firstName = profile.full_name.trim().split(/\s+/)[0];
-  const heading = document.querySelector(".welcome-row h1");
-  if (heading) heading.innerHTML = "Good day, <em></em>";
-  const name = document.querySelector(".welcome-row h1 em");
-  if (name) name.textContent = firstName + ".";
-  const avatar = document.getElementById("userAvatar");
-  if (avatar) avatar.textContent = firstName.charAt(0).toUpperCase();
-}
-
-const accounts={5000:{label:"$5,000 · Starter",target:400,daily:250,max:500},10000:{label:"$10,000 · Core",target:800,daily:500,max:1000},20000:{label:"$20,000 · Advanced",target:1600,daily:1000,max:2000},50000:{label:"$50,000 · Pro",target:4000,daily:2500,max:5000},100000:{label:"$100,000 · Elite",target:8000,daily:5000,max:10000}};
+const accounts={5000:{target:400},10000:{target:800},20000:{target:1600},50000:{target:4000},100000:{target:8000}};
 const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",minimumFractionDigits:2}).format(n);
 const select=document.getElementById("accountSelect");
-function updateAccount(){const size=Number(select.value),a=accounts[size];document.getElementById("balance").textContent=money(size);document.getElementById("initialEquity").textContent=money(size);document.getElementById("targetAmount").textContent=money(a.target);document.getElementById("targetBig").textContent=money(a.target);document.getElementById("targetEnd").textContent=money(a.target)+" target";document.getElementById("dailyLimit").textContent=money(a.daily);document.getElementById("maxLimit").textContent=money(a.max);document.getElementById("netPnl").textContent=money(0);document.getElementById("targetProgress").textContent="0.0%";document.getElementById("progressPercent").innerHTML='0<span>%</span>';document.getElementById("progressBar").style.width="0%";}
-select.addEventListener("change",updateAccount);
-const menu=document.getElementById("mobileMenu"),sidebar=document.getElementById("sidebar");menu.addEventListener("click",()=>sidebar.classList.toggle("open"));document.querySelectorAll(".side-link").forEach(link=>link.addEventListener("click",()=>sidebar.classList.remove("open")));
-document.getElementById("year").textContent=new Date().getFullYear();
-const toast=document.getElementById("toast");document.querySelectorAll(".side-link[href^='#']").forEach(link=>link.addEventListener("click",()=>{toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2400)}));
-document.getElementById("logoutBtn").addEventListener("click",async()=>{await supabase.auth.signOut();location.replace("auth.html");});
-updateAccount();
+function updateAccount(){const size=Number(select.value),a=accounts[size];document.getElementById("balance").textContent=money(size);document.getElementById("initialEquity").textContent=money(size);document.getElementById("targetAmount").textContent=money(a.target);document.getElementById("netPnl").textContent=money(0);document.getElementById("targetProgress").textContent="0.0%";}
+select.addEventListener("change",updateAccount);updateAccount();
