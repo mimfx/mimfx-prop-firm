@@ -21,7 +21,7 @@ async function boot(){
  $("tradersBody").innerHTML=traders.length?traders.map(t=>'<tr><td>'+esc(t.full_name||"Trader")+'</td><td><small>'+t.id+'</small></td><td>'+new Date(t.created_at).toLocaleDateString()+'</td></tr>').join(""):'<tr><td colspan="3">No traders found.</td></tr>';
  let names=Object.fromEntries(traders.map(t=>[t.id,t.full_name||"Trader"]));
  $("accountsBody").innerHTML=accounts.length?accounts.map(a=>'<tr><td>$'+Number(a.account_size).toLocaleString()+'</td><td>'+esc(names[a.user_id]||a.user_id.slice(0,8))+'</td><td>'+esc(a.model)+'<small>'+esc(a.stage)+'</small></td><td>'+esc(a.rule_set_id)+'</td><td>'+esc(a.status.replaceAll("_"," "))+'</td><td>'+new Date(a.created_at).toLocaleDateString()+'</td></tr>').join(""):'<tr><td colspan="6">No challenge records yet.</td></tr>';
- $("rulesBody").innerHTML=rules.map(r=>'<tr><td>'+esc(r.model)+'<small>'+esc(r.stage)+'</small></td><td>'+esc(r.drawdown_type)+'</td><td>'+(r.profit_target_pct==null?"—":r.profit_target_pct+"%")+'</td><td>'+r.max_drawdown_pct+'%</td><td>'+r.daily_drawdown_pct+'%</td><td>'+(r.trader_payout_pct==null?"—":r.trader_payout_pct+"/"+r.firm_payout_pct)+'</td></tr>').join("");
+ $("rulesBody").innerHTML=rules.map(r=>'<tr><td>'+esc(r.model)+'<small>'+esc(r.stage)+'</small></td><td>'+esc(r.drawdown_type)+'</td><td>'+(r.profit_target_pct==null?"—":r.profit_target_pct+"%")+'</td><td>'+r.max_drawdown_pct+'%</td><td>'+r.daily_drawdown_pct+'%</td><td>'+(r.trader_payout_pct==null?"—":r.trader_payout_pct+"/"+r.firm_payout_pct+(r.payout_processing_days?" · "+r.payout_processing_days+" days":""))+'</td></tr>').join("");
  updateStages();
 }
 $("accountForm").addEventListener("submit",async e=>{
