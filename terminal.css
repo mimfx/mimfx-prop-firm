@@ -16,3 +16,5 @@ table[hidden]{display:none}
 
 /* Native candlestick chart and order-level overlays */
 #priceChart{position:relative;overflow:hidden;background:#0b120e;border:1px solid #1b2a20}.chart-error{height:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#e3bd70;font:700 10px var(--font);letter-spacing:1px;text-align:center}.chart-error small{max-width:90%;color:#9aaa9d;font-size:9px;letter-spacing:0;font-weight:500}.chart-error button{background:#b6e5a0;color:#102014;border:0;padding:9px 14px;font:800 9px var(--font);cursor:pointer}
+
+/* Bid/Ask labels use blue/orange chart price lines; simulated spread disclosed in quote status. */
