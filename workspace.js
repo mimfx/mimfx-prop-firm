@@ -6,7 +6,7 @@ const firstName = profile?.full_name?.trim().split(" ")[0] || "Trader";
 const avatar = document.getElementById("userAvatar");
 if (avatar) avatar.textContent = firstName.charAt(0).toUpperCase();
 const page = location.pathname.split("/").pop().replace(".html","");
-const labels = {dashboard:"Dashboard",challenge:"Challenge",activity:"Trading activity",risk:"Risk limits",account:"My account"};
+const labels = {dashboard:"Dashboard",terminal:"Trading terminal",challenge:"Challenge",activity:"Trading activity",risk:"Risk limits",account:"My account"};
 document.getElementById("pageLabel").textContent = labels[page] || "Workspace";
 document.querySelectorAll(".side-link[data-page]").forEach(link => { if(link.dataset.page===page) link.classList.add("active"); });
 document.getElementById("year").textContent = new Date().getFullYear();
