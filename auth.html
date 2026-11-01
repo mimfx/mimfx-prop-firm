@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d0b">
+<title>Sign in | Nexora Funding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<header><a class="brand" href="index.html"><span class="mark">N<span>↗</span></span><span>NEXORA <b>FUNDING</b></span></a><a class="back" href="index.html">← Back to website</a></header>
+<main>
+<section class="auth-card">
+<div class="eyebrow"><i></i> TRADER ACCESS</div>
+<div class="tabs"><button class="tab active" data-mode="signin">Sign in</button><button class="tab" data-mode="signup">Create account</button></div>
+<h1 id="title">Welcome <em>back.</em></h1>
+<p class="intro" id="intro">Sign in to access your Nexora trader workspace.</p>
+<form id="authForm">
+<label id="nameWrap" class="hidden">Full name<input id="fullName" type="text" autocomplete="name" placeholder="Your full name"></label>
+<label>Email address<input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+<label id="passwordWrap">Password<input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required></label>
+<label id="confirmWrap" class="hidden">Confirm password<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Repeat your password"></label>
+<button class="submit" id="submitBtn" type="submit">Sign in <span>↗</span></button>
+</form>
+<button id="forgotBtn" class="forgot">Forgot your password?</button>
+<div id="message" class="message" role="status" aria-live="polite"></div>
+<div class="secure-note"><span>◇</span> Secure account access powered by Supabase Auth.</div>
+</section>
+<p class="footnote">Nexora Funding is under development. Account access does not mean a trading challenge or funded account is active.</p>
+</main>
+<script type="module" src="auth.js"></script>
+</body></html>
