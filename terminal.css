@@ -434,3 +434,5 @@ body[data-mobile-view="history"] #historyTable:not([hidden]){display:table!impor
  body[data-mobile-view="trade"] .mt-position-line strong{justify-self:start}
  body[data-mobile-view="trade"] .mt-position-prices{font-size:13px;padding-top:4px}
 }
+
+.quote-empty{padding:28px 16px;text-align:center;color:#9aa59c;font-size:12px}
