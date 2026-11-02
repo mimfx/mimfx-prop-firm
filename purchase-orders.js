@@ -23,13 +23,15 @@ async function load(){
 }
 body.addEventListener("click",async e=>{
  const btn=e.target.closest(".mark-order-paid");if(!btn)return;
- const reference=prompt("Enter the verified payment reference. Only continue after confirming the funds have actually arrived.");
- if(!reference||reference.trim().length<3)return;
- if(!confirm("Confirm that payment has been received and is cleared? This creates a challenge in pending provisioning."))return;
+ const currency=prompt("Receipt currency (USD, USDT or USDC):","USD");if(!currency)return;
+ const amount=prompt("Exact amount actually received (must match the order total):");if(!amount)return;
+ const reference=prompt("Enter the verified bank or wallet transaction reference.");
+ if(!reference||reference.trim().length<4)return;
+ if(!confirm("Confirm the funds have actually arrived and cleared? The receipt will be posted to NEXORA PAY and the challenge will remain pending provisioning."))return;
  btn.disabled=true;
- const {data,error}=await supabase.rpc("admin_mark_nexora_order_paid",{p_order_id:btn.dataset.id,p_payment_reference:reference.trim()});
- if(error){alert("Could not mark order paid: "+error.message);btn.disabled=false;return;}
- alert("Payment recorded. Challenge created in pending provisioning. MT5 is not activated.");
+ const {data,error}=await supabase.rpc("admin_confirm_nexora_order_receipt",{p_order_id:btn.dataset.id,p_currency:currency.toUpperCase(),p_received_amount:Number(amount),p_external_reference:reference.trim()});
+ if(error){alert("Could not reconcile payment: "+error.message);btn.disabled=false;return;}
+ alert("Receipt posted to NEXORA PAY. Challenge created in pending provisioning. MT5 is not activated.");
  await load();
 });
 boot().catch(e=>{body.innerHTML='<tr><td colspan="6">'+esc(e.message)+'</td></tr>';});
