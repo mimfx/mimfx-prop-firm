@@ -26,8 +26,8 @@ document.addEventListener("click",e=>{if(!e.target.closest("#quoteActions")&&!e.
 function setVolume(v){$("volume").value=v;$("quickVolume").value=v;$("topVolume").value=v;}
 $("topVolume")?.addEventListener("change",e=>setVolume(e.target.value));
 $("quickVolume")?.addEventListener("change",e=>setVolume(e.target.value));
-$("topBuy")?.addEventListener("click",()=>{$("orderType").value="market";$("orderType").dispatchEvent(new Event("change"));$("buyBtn").click();});
-$("topSell")?.addEventListener("click",()=>{$("orderType").value="market";$("orderType").dispatchEvent(new Event("change"));$("sellBtn").click();});
+$("topBuy")?.addEventListener("click",()=>{if(window.nexoraExecuteMarketOrder)window.nexoraExecuteMarketOrder("BUY");});
+$("topSell")?.addEventListener("click",()=>{if(window.nexoraExecuteMarketOrder)window.nexoraExecuteMarketOrder("SELL");});
 function openTicket(type){$("orderType").value=type;$("orderType").dispatchEvent(new Event("change"));document.body.classList.add("order-ticket-open");renderOrderTabs();}
 function closeTicket(){document.body.classList.remove("order-ticket-open");}
 $("openOrderTicket")?.addEventListener("click",()=>openTicket($("orderType").value||"market"));
