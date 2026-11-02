@@ -352,3 +352,47 @@ body[data-mobile-view="trade"] #pendingTable:not([hidden]){display:table!importa
 body[data-mobile-view="history"] #positionsTable,
 body[data-mobile-view="history"] #pendingTable{display:none!important}
 body[data-mobile-view="history"] #historyTable:not([hidden]){display:table!important}
+
+
+/* MT5-inspired dedicated History screen */
+.history-screen{display:none;margin:12px 0 100px;background:#080c09;border:1px solid #243128;color:#e8eee9}
+.history-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px;border-bottom:1px solid #29352d}
+.history-toolbar h2{font-size:22px;margin:4px 0}
+.history-toolbar small{color:#a4afa7}
+.history-filters{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.history-filters select{max-width:135px;padding:9px 8px;background:#111a14;color:#e5eee7;border:1px solid #35443a;border-radius:6px;font-size:11px}
+.history-tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #39433d}
+.history-tabs button{padding:15px 5px;background:transparent;border:0;border-bottom:3px solid transparent;color:#929d95;font-size:13px;font-weight:800;text-transform:uppercase}
+.history-tabs button.active{color:#e9f0eb;border-bottom-color:#3989ed}
+.history-summary{padding:13px 16px 15px;border-bottom:1px solid #3b4540}
+.history-summary div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;font-size:13px;font-weight:700}
+.history-summary span{color:#d1d9d3}
+.history-summary b{font-size:15px;text-align:right}
+.history-list{padding:0 14px 15px}
+.history-trade-card{padding:16px 8px;border-bottom:1px solid #333c36}
+.history-trade-top{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;font-size:14px}
+.history-trade-top strong{font-size:13px}
+.history-type{font-size:10px;color:#89968d;text-transform:uppercase}
+.history-trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 12px;padding:15px 0}
+.history-trade-grid div{display:flex;flex-direction:column;gap:5px}
+.history-trade-grid small{font-size:10px;color:#96a198}
+.history-trade-grid b{font-size:13px}
+.history-trade-card time{font-size:11px;color:#9da79f}
+.history-empty{padding:35px 12px;text-align:center;color:#929d95;font-size:13px}
+.history-screen [hidden]{display:none!important}
+@media(max-width:700px){
+ body[data-mobile-view="history"] #historyScreen{display:block!important}
+ body[data-mobile-view="history"] .positions-panel,
+ body[data-mobile-view="history"] #terminalWorkspace,
+ body[data-mobile-view="history"] .account-overview,
+ body[data-mobile-view="history"] .terminal-footnote,
+ body[data-mobile-view="history"] .footer{display:none!important}
+ body[data-mobile-view="history"] #historyScreen[hidden]{display:none!important}
+ body[data-mobile-view="history"] #historyScreen{margin:8px 8px 95px}
+ .history-toolbar{padding:14px 12px;align-items:flex-start;flex-direction:column}
+ .history-filters{width:100%;justify-content:flex-start}
+ .history-filters select{flex:1;max-width:none}
+ .history-summary{padding:10px 13px}
+ .history-summary div{padding:6px 0;font-size:13px}
+ .history-summary b{font-size:14px}
+}
