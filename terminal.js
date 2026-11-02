@@ -78,37 +78,29 @@ async function pollQuotes(){const watch=(()=>{try{return JSON.parse(localStorage
 const isMarket=$("orderType").value==="market";renderQuotesList();$("quickBid").textContent=fresh?fmt(Number(q.bid)):"—";$("quickAsk").textContent=fresh?fmt(Number(q.ask)):"—";$("buyBtn").disabled=!fresh||!isMarket;$("sellBtn").disabled=!fresh||!isMarket;$("placePending").disabled=!fresh||isMarket;$("executionHint").textContent=isMarket?"At current bid/ask": "Triggered by live bid/ask";$("pendingPrice").placeholder=isMarket?"Not needed for market order":"Required trigger price";renderQuotesList();checkOrders()}
 async function draw(){const el=$("priceChart");if(chartResizeObserver){chartResizeObserver.disconnect();chartResizeObserver=null;}if(chart){chart.remove();chart=null;candleSeries=null;priceLines=[];}el.innerHTML="";if(!window.LightweightCharts){el.textContent="Chart library unavailable. Refresh to retry.";return;}chart=LightweightCharts.createChart(el,{width:el.clientWidth,height:el.clientHeight,layout:{background:{type:"solid",color:"#0b120e"},textColor:"#9aaa9d",fontFamily:"DM Sans, sans-serif"},grid:{vertLines:{color:"#17231b"},horzLines:{color:"#17231b"}},crosshair:{mode:LightweightCharts.CrosshairMode.Normal,vertLine:{color:"#6f8a72",width:1,style:2},horzLine:{color:"#6f8a72",width:1,style:2}},rightPriceScale:{borderColor:"#26372a",autoScale:true},timeScale:{borderColor:"#26372a",timeVisible:true,secondsVisible:false},localization:{locale:"en-US"}});candleSeries=chart.addCandlestickSeries({upColor:"#9bd58c",downColor:"#d66e76",borderUpColor:"#9bd58c",borderDownColor:"#d66e76",wickUpColor:"#9bd58c",wickDownColor:"#d66e76",priceLineVisible:true,lastValueVisible:true});chartResizeObserver=new ResizeObserver(entries=>{for(const entry of entries){if(chart)chart.applyOptions({width:Math.floor(entry.contentRect.width),height:Math.floor(entry.contentRect.height)});}});chartResizeObserver.observe(el);$("quoteChange").textContent="LOADING HISTORICAL CANDLES…";try{const interval=tf;const response=await fetch(MARKET_API+"/v1/ohlc/"+encodeURIComponent(symbol)+"?interval="+interval+"&limit=300",{cache:"no-store"});if(!response.ok)throw new Error("Candle feed unavailable ("+response.status+")");const payload=await response.json();if(!Array.isArray(payload.bars)||!payload.bars.length)throw new Error("No candle history returned for this market.");const seen=new Map();for(const b of payload.bars){const time=Math.floor(Date.parse(b.openTime)/1000);const open=Number(b.open),high=Number(b.high),low=Number(b.low),close=Number(b.close);if(Number.isFinite(time)&&[open,high,low,close].every(Number.isFinite))seen.set(time,{time,open,high,low,close});}const data=[...seen.values()].sort((a,b)=>a.time-b.time);if(!data.length)throw new Error("Candle history was not valid.");candleSeries.setData(data);chart.timeScale().fitContent();$("quoteChange").textContent="BIQUOTE CANDLES · "+data.length+" BARS · "+tf.toUpperCase();renderChartLines();}catch(error){el.innerHTML='<div class="chart-error">CANDLE HISTORY UNAVAILABLE<br><small>'+String(error.message).replace(/[<>&"]/g,"")+'</small><br><button id="retryCandles" type="button">RETRY CHART</button></div>';const retry=$("retryCandles");if(retry)retry.addEventListener("click",draw);}pollQuotes();}
 
-let candleRefreshBusy=false,lastCandle=null,lastOhlcRefresh=0;
-function timeframeSeconds(v){const m=String(v).match(/^(\\d+)([mhdw])$/i);if(!m)return 300;const n=Number(m[1]);return n*({m:60,h:3600,d:86400,w:604800}[m[2].toLowerCase()]||300);}
-function updateChartFromQuote(){
- if(!candleSeries||!chart)return;
- const q=liveQuotes[symbol];if(!q||!quoteTradable(q))return;
- const price=Number(q.mid),stamp=Math.floor(Date.parse(q.timestamp)/1000);
- if(!Number.isFinite(price)||!Number.isFinite(stamp))return;
- const span=timeframeSeconds(tf),barTime=Math.floor(stamp/span)*span;
- if(!lastCandle||barTime>lastCandle.time){lastCandle={time:barTime,open:price,high:price,low:price,close:price};}
- else if(barTime===lastCandle.time){lastCandle={...lastCandle,high:Math.max(lastCandle.high,price),low:Math.min(lastCandle.low,price),close:price};}
- else return;
- try{candleSeries.update(lastCandle);}catch(e){}
-}
-async function refreshLiveCandles(force=false){
+let candleRefreshBusy=false;
+async function refreshLiveCandles(){
  if(candleRefreshBusy||!chart||!candleSeries||!document.getElementById("priceChart"))return;
- if(!force&&Date.now()-lastOhlcRefresh<30000){updateChartFromQuote();return;}
- const targetSymbol=symbol,targetTf=tf,targetSeries=candleSeries;candleRefreshBusy=true;lastOhlcRefresh=Date.now();
+ const targetSymbol=symbol,targetTf=tf,targetSeries=candleSeries;
+ candleRefreshBusy=true;
  try{
   const response=await fetch(MARKET_API+"/v1/ohlc/"+encodeURIComponent(targetSymbol)+"?interval="+encodeURIComponent(targetTf)+"&limit=300",{cache:"no-store"});
-  if(!response.ok)throw new Error("Candle history HTTP "+response.status);
+  if(!response.ok)throw new Error("Candle refresh failed");
   const payload=await response.json();
-  if(targetSymbol!==symbol||targetTf!==tf||targetSeries!==candleSeries||!Array.isArray(payload.bars)||!payload.bars.length)throw new Error("No fresh candle data returned");
+  if(targetSymbol!==symbol||targetTf!==tf||targetSeries!==candleSeries||!Array.isArray(payload.bars)||!payload.bars.length)return;
   const seen=new Map();
-  for(const b of payload.bars){const time=Math.floor(Date.parse(b.openTime)/1000),open=Number(b.open),high=Number(b.high),low=Number(b.low),close=Number(b.close);if(Number.isFinite(time)&&[open,high,low,close].every(Number.isFinite))seen.set(time,{time,open,high,low,close});}
-  const bars=[...seen.values()].sort((a,b)=>a.time-b.time);if(!bars.length)throw new Error("Invalid candle data");
-  candleSeries.setData(bars);lastCandle={...bars[bars.length-1]};updateChartFromQuote();
-  $("quoteChange").textContent="LIVE QUOTE UPDATES · "+targetTf.toUpperCase()+" · "+new Date().toLocaleTimeString();
- }catch(e){$("quoteChange").textContent="CHART FEED DELAYED · RETRYING · "+String(e.message||"").slice(0,90);}
+  for(const b of payload.bars){
+   const time=Math.floor(Date.parse(b.openTime)/1000),open=Number(b.open),high=Number(b.high),low=Number(b.low),close=Number(b.close);
+   if(Number.isFinite(time)&&[open,high,low,close].every(Number.isFinite))seen.set(time,{time,open,high,low,close});
+  }
+  const bars=[...seen.values()].sort((a,b)=>a.time-b.time);
+  if(bars.length)targetSeries.setData(bars);
+  const last=bars[bars.length-1];
+  if(last)$("quoteChange").textContent="LIVE UPDATING · BIQUOTE · "+targetTf.toUpperCase()+" · "+new Date().toLocaleTimeString();
+ }catch(e){/* Keep the last valid candles visible during a temporary feed delay. */}
  finally{candleRefreshBusy=false;}
 }
-function changeSymbol(){symbol=$("symbol").value;lastCandle=null;lastOhlcRefresh=0;draw()}
+function changeSymbol(){symbol=$("symbol").value;draw()}
 document.querySelectorAll("[data-mobile-view]").forEach(b=>b.addEventListener("click",()=>{const view=b.dataset.mobileView;document.body.dataset.mobileView=view;document.querySelectorAll("[data-mobile-view]").forEach(x=>x.classList.toggle("active",x===b));if(view==="history")switchTab("history");if(view==="trade")switchTab("positions");if(view==="charts")setTimeout(()=>{if(chart)chart.applyOptions({width:$("priceChart").clientWidth,height:$("priceChart").clientHeight});},80)}));
 
 
@@ -123,6 +115,5 @@ document.querySelectorAll("[data-trade-tab]").forEach(b=>b.addEventListener("cli
 $("timeframes").addEventListener("click",e=>{const b=e.target.closest("button[data-tf]");if(!b)return;tf=b.dataset.tf;document.querySelectorAll("#timeframes button").forEach(x=>x.classList.toggle("active",x===b));draw()});
 $("resetDemo").addEventListener("click",()=>{if(!confirm("Reset this browser's simulated trades, pending orders and demo balance?"))return;state={size:Number($("accountSize").value),closedPnl:0,positions:[],pending:[],history:[]};save();render()});
 $("year").textContent=new Date().getFullYear();render();document.body.dataset.mobileView="charts";switchTab("positions");$("pendingPrice").disabled=true;$("placePending").disabled=true;draw();pollQuotes();quotePollTimer=setInterval(pollQuotes,5000);
-setInterval(updateChartFromQuote,1000);
-setInterval(()=>refreshLiveCandles(false),5000);
+setInterval(refreshLiveCandles,1000);
 })();
