@@ -6,13 +6,13 @@ const symbolSelect=$("symbol"),all=[...symbolSelect.options].filter(o=>o.value).
 let pickerCategory="fx",selectedQuote=null,longTimer=null;
 const categoryOf=x=>/CRYPTO/i.test(x.group)?"crypto":/INDICES/i.test(x.group)?"index":/PRECIOUS/i.test(x.group)?"metal":/MINOR/i.test(x.group)?"minor":"fx";
 function syncWatch(){const current=getWatch();setWatch(current.length?current:["EURUSD","GBPUSD","USDJPY","XAUUSD"]);}
-syncWatch();
+syncWatch();window.nexoraRenderQuotesList?.();
 function drawChoices(){const q=$("symbolSearch").value.toLowerCase();$("symbolChoices").innerHTML=all.filter(x=>categoryOf(x)===pickerCategory&&(x.symbol.toLowerCase().includes(q)||x.label.toLowerCase().includes(q))).map(x=>'<button class="symbol-choice" data-add-symbol="'+x.symbol+'"><span>'+x.symbol+' <small>'+x.label.split("·").slice(1).join("·")+'</small></span><b>'+(getWatch().includes(x.symbol)?"ADDED":"＋ ADD")+'</b></button>').join("")||'<p class="picker-empty">No matching symbols.</p>';}
 function openPicker(){ $("symbolPicker").hidden=false;$("symbolSearch").value="";drawChoices();}
 $("addSymbolButton")?.addEventListener("click",openPicker);
 $("closeSymbolPicker")?.addEventListener("click",()=> $("symbolPicker").hidden=true);
 $("doneSymbolPicker")?.addEventListener("click",()=>{$("symbolPicker").hidden=true;});
-$("symbolPicker")?.addEventListener("click",e=>{const tab=e.target.closest("[data-category]");if(tab){pickerCategory=tab.dataset.category;document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b===tab));drawChoices();return;}const add=e.target.closest("[data-add-symbol]");if(add){const s=add.dataset.addSymbol;setWatch([...getWatch(),s]);drawChoices();const nativeRender=$("quotesList");if(nativeRender){const row=nativeRender.querySelector('[data-quote-symbol="'+s+'"]');if(!row)setTimeout(()=>{},0);}return;}});
+$("symbolPicker")?.addEventListener("click",e=>{const tab=e.target.closest("[data-category]");if(tab){pickerCategory=tab.dataset.category;document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b===tab));drawChoices();return;}const add=e.target.closest("[data-add-symbol]");if(add){const s=add.dataset.addSymbol;setWatch([...getWatch(),s]);window.nexoraRenderQuotesList?.();drawChoices();const nativeRender=$("quotesList");if(nativeRender){const row=nativeRender.querySelector('[data-quote-symbol="'+s+'"]');if(!row)setTimeout(()=>{},0);}return;}});
 $("symbolSearch")?.addEventListener("input",drawChoices);
 document.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{pickerCategory=b.dataset.category;drawChoices()}));
 function selectSymbol(s){if(!all.some(x=>x.symbol===s))return;symbolSelect.value=s;symbolSelect.dispatchEvent(new Event("change",{bubbles:true}));document.body.dataset.mobileView="charts";setNav("charts");}
@@ -21,7 +21,7 @@ $("quotesList")?.addEventListener("click",e=>{const row=e.target.closest("[data-
 $("quotesList")?.addEventListener("contextmenu",e=>{const row=e.target.closest("[data-quote-symbol]");if(!row)return;e.preventDefault();selectedQuote=row.dataset.quoteSymbol;const m=$("quoteActions");m.hidden=false;m.style.top=Math.min(e.clientY,innerHeight-210)+"px";m.style.left=Math.min(e.clientX,innerWidth-220)+"px";});
 $("quotesList")?.addEventListener("touchstart",e=>{const row=e.target.closest("[data-quote-symbol]");if(!row)return;selectedQuote=row.dataset.quoteSymbol;longTimer=setTimeout(()=>{const m=$("quoteActions");m.hidden=false;m.style.left="50%";m.style.top="45%";m.style.transform="translate(-50%,-50%)";},550);},{passive:true});
 ["touchend","touchmove","touchcancel"].forEach(n=>$("quotesList")?.addEventListener(n,()=>clearTimeout(longTimer),{passive:true}));
-$("quoteActions")?.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const action=b.dataset.action,m=$("quoteActions");m.hidden=true;m.style.transform="";if(action==="chart")selectSymbol(selectedQuote);if(action==="trade"){selectSymbol(selectedQuote);openTicket("market");}if(action==="remove"){setWatch(getWatch().filter(s=>s!==selectedQuote));const row=$('quotesList [data-quote-symbol="'+selectedQuote+'"]');row?.remove();}});
+$("quoteActions")?.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const action=b.dataset.action,m=$("quoteActions");m.hidden=true;m.style.transform="";if(action==="chart")selectSymbol(selectedQuote);if(action==="trade"){selectSymbol(selectedQuote);openTicket("market");}if(action==="remove"){setWatch(getWatch().filter(s=>s!==selectedQuote));window.nexoraRenderQuotesList?.();const row=$('quotesList [data-quote-symbol="'+selectedQuote+'"]');row?.remove();}});
 document.addEventListener("click",e=>{if(!e.target.closest("#quoteActions")&&!e.target.closest("#quotesList")){$("quoteActions").hidden=true;$("quoteActions").style.transform="";}});
 function setVolume(v){$("volume").value=v;$("quickVolume").value=v;$("topVolume").value=v;}
 $("topVolume")?.addEventListener("change",e=>setVolume(e.target.value));
@@ -59,7 +59,7 @@ document.querySelectorAll("[data-mobile-view]").forEach(b=>b.addEventListener("c
  if(view==="trade"){document.querySelector('[data-trade-tab="positions"]')?.click();$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});}
  if(view==="history"){$("historyScreen").hidden=false;$("historyScreen").scrollIntoView({block:"start",behavior:"smooth"});}
  if(view==="charts"){$("terminalWorkspace").scrollIntoView({block:"start",behavior:"smooth"});}
- if(view==="quotes"){$("quotesScreen").scrollIntoView({block:"start",behavior:"smooth"});}
+ if(view==="quotes"){window.nexoraRenderQuotesList?.();$("quotesScreen").scrollIntoView({block:"start",behavior:"smooth"});}
 }));
 document.body.dataset.mobileView="charts";setNav("charts");renderOrderTabs();updateAccount();
 })();
