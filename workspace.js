@@ -10,7 +10,7 @@ const page = location.pathname.split("/").pop().replace(".html","");
 if(page==="terminal"){
  const gate=document.getElementById("tradingLoginScreen"),form=document.getElementById("tradingLoginForm"),error=document.getElementById("tradingLoginError"),submit=document.getElementById("tradingLoginSubmit");
  let saved=null;try{saved=JSON.parse(sessionStorage.getItem("nexora_trading_login")||"null")}catch{}
- if(saved?.account_number&&saved?.account_size){gate.hidden=true;document.body.classList.add("terminal-authenticated");}
+ if(saved?.account_number&&saved?.account_size){gate.hidden=true;document.body.classList.add("terminal-authenticated");const size=document.getElementById("accountSize");if(size){size.value=String(saved.account_size);size.disabled=true;size.dispatchEvent(new Event("change",{bubbles:true}));}}
  else{gate.hidden=false;document.body.classList.add("terminal-locked");}
  form.addEventListener("submit",async event=>{
   event.preventDefault();error.textContent="";submit.disabled=true;submit.textContent="VERIFYING…";
@@ -21,7 +21,7 @@ if(page==="terminal"){
    const result=await response.json();if(!response.ok)throw new Error(result.error||"Login failed. Check your trading credentials.");
    const account=result.account||result;if(!account.account_number||!account.account_size)throw new Error("Login response was incomplete.");
    sessionStorage.setItem("nexora_trading_login",JSON.stringify(account));gate.hidden=true;document.body.classList.add("terminal-authenticated");
-   const size=document.getElementById("accountSize");if(size&&[2500,5000,10000,20000].includes(Number(account.account_size))){size.value=String(account.account_size);size.dispatchEvent(new Event("change",{bubbles:true}));}
+   const size=document.getElementById("accountSize");if(size&&[2500,5000,10000,20000].includes(Number(account.account_size))){size.value=String(account.account_size);size.disabled=true;size.dispatchEvent(new Event("change",{bubbles:true}));}
   }catch(err){error.textContent=err.message||"Unable to verify login.";}
   finally{submit.disabled=false;submit.innerHTML='LOGIN TO TERMINAL <span>→</span>';}
  });
