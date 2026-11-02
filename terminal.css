@@ -342,3 +342,13 @@ body[data-mobile-view="charts"] .mt-deal-strip{display:grid!important}
 
 /* Keep closed-trade history exclusively in the bottom History destination. */
 .trade-tabs [data-trade-tab="history"]{display:none!important}
+
+
+/* Explicitly enforce the active trade table; hidden history must never leak into Trade. */
+#positionsTable[hidden],#pendingTable[hidden],#historyTable[hidden]{display:none!important}
+body[data-mobile-view="trade"] #historyTable{display:none!important}
+body[data-mobile-view="trade"] #positionsTable:not([hidden]),
+body[data-mobile-view="trade"] #pendingTable:not([hidden]){display:table!important}
+body[data-mobile-view="history"] #positionsTable,
+body[data-mobile-view="history"] #pendingTable{display:none!important}
+body[data-mobile-view="history"] #historyTable:not([hidden]){display:table!important}
