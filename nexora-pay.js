@@ -28,4 +28,5 @@ $("movement").addEventListener("submit",async e=>{
  $("status").textContent="Recorded: "+data.reference;
  e.target.reset();await Promise.all([loadBalances(),loadHistory()]);
 });
+window.nexoraPayReload=async()=>{await Promise.all([loadBalances(),loadHistory()]);};
 boot();
