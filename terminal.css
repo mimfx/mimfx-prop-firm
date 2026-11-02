@@ -282,3 +282,5 @@ table[hidden]{display:none}
  #pendingTable tbody tr,#historyTable tbody tr{display:grid;grid-template-columns:1fr 1fr;padding:10px;border-bottom:1px solid #29392e}
  #pendingTable td,#historyTable td{padding:6px;border:0}
 }
+
+@media(max-width:700px){.chart-top .timeframes{display:none!important}}
