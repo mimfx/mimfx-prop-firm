@@ -302,3 +302,40 @@ body[data-mobile-view="charts"] .mt-deal-strip{display:grid!important}
  body[data-mobile-view="messages"] .mt-top-tools,
  body[data-mobile-view="messages"] .mt-deal-strip{display:none!important}
 }
+
+
+/* Fix: chart trading controls must never appear on Quotes/Trade/History/Messages */
+.mt-top-tools,.mt-deal-strip{display:none!important}
+body[data-mobile-view="charts"] .mt-top-tools,
+body[data-mobile-view="charts"] .mt-deal-strip{display:flex!important}
+body[data-mobile-view="charts"] .mt-deal-strip{display:grid!important}
+@media(max-width:700px){
+ body[data-mobile-view="quotes"] #terminalWorkspace,
+ body[data-mobile-view="quotes"] .account-overview,
+ body[data-mobile-view="quotes"] .positions-panel{display:none!important}
+ body[data-mobile-view="quotes"] #quotesScreen{display:block!important}
+ body[data-mobile-view="charts"] #quotesScreen,
+ body[data-mobile-view="charts"] .account-overview,
+ body[data-mobile-view="charts"] .positions-panel{display:none!important}
+ body[data-mobile-view="charts"] #terminalWorkspace{display:block!important}
+ body[data-mobile-view="charts"] .chart-panel{display:block!important}
+ body[data-mobile-view="trade"] #quotesScreen,
+ body[data-mobile-view="trade"] #terminalWorkspace{display:none!important}
+ body[data-mobile-view="trade"] .account-overview,
+ body[data-mobile-view="trade"] .positions-panel{display:block!important}
+ body[data-mobile-view="history"] #quotesScreen,
+ body[data-mobile-view="history"] #terminalWorkspace{display:none!important}
+ body[data-mobile-view="history"] .positions-panel{display:block!important}
+ body[data-mobile-view="history"] .account-overview{display:grid!important}
+ body[data-mobile-view="messages"] #quotesScreen,
+ body[data-mobile-view="messages"] #terminalWorkspace,
+ body[data-mobile-view="messages"] .positions-panel,
+ body[data-mobile-view="messages"] .account-overview{display:none!important}
+ body[data-mobile-view="charts"] .mt-deal-strip{position:sticky;top:48px}
+ body[data-mobile-view="quotes"] .mt-deal-strip,
+ body[data-mobile-view="trade"] .mt-deal-strip,
+ body[data-mobile-view="history"] .mt-deal-strip,
+ body[data-mobile-view="messages"] .mt-deal-strip{display:none!important}
+ body.order-ticket-open .mt-top-tools,
+ body.order-ticket-open .mt-deal-strip{display:none!important}
+}
