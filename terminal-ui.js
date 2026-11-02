@@ -56,7 +56,7 @@ const observer=new MutationObserver(updateAccount);["balance","openPnl","equity"
 setInterval(updateAccount,1000);
 document.querySelectorAll("[data-mobile-view]").forEach(b=>b.addEventListener("click",e=>{
  e.preventDefault();e.stopImmediatePropagation();const view=b.dataset.mobileView;setNav(view);
- if(view==="trade"){$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});}
+ if(view==="trade"){document.querySelector('[data-trade-tab="positions"]')?.click();$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});}
  if(view==="history"){document.querySelector('[data-trade-tab="history"]')?.click();$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});}
  if(view==="charts"){$("terminalWorkspace").scrollIntoView({block:"start",behavior:"smooth"});}
  if(view==="quotes"){$("quotesScreen").scrollIntoView({block:"start",behavior:"smooth"});}
