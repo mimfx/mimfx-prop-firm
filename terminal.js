@@ -123,5 +123,6 @@ document.querySelectorAll("[data-trade-tab]").forEach(b=>b.addEventListener("cli
 $("timeframes").addEventListener("click",e=>{const b=e.target.closest("button[data-tf]");if(!b)return;tf=b.dataset.tf;document.querySelectorAll("#timeframes button").forEach(x=>x.classList.toggle("active",x===b));draw()});
 $("resetDemo").addEventListener("click",()=>{if(!confirm("Reset this browser's simulated trades, pending orders and demo balance?"))return;state={size:Number($("accountSize").value),closedPnl:0,positions:[],pending:[],history:[]};save();render()});
 $("year").textContent=new Date().getFullYear();render();document.body.dataset.mobileView="charts";switchTab("positions");$("pendingPrice").disabled=true;$("placePending").disabled=true;draw();pollQuotes();quotePollTimer=setInterval(pollQuotes,5000);
-setInterval(updateChartFromQuote,1000);\nsetInterval(()=>refreshLiveCandles(false),5000);
+setInterval(updateChartFromQuote,1000);
+setInterval(()=>refreshLiveCandles(false),5000);
 })();
