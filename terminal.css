@@ -18,3 +18,48 @@ table[hidden]{display:none}
 #priceChart{position:relative;overflow:hidden;background:#0b120e;border:1px solid #1b2a20}.chart-error{height:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#e3bd70;font:700 10px var(--font);letter-spacing:1px;text-align:center}.chart-error small{max-width:90%;color:#9aaa9d;font-size:9px;letter-spacing:0;font-weight:500}.chart-error button{background:#b6e5a0;color:#102014;border:0;padding:9px 14px;font:800 9px var(--font);cursor:pointer}
 
 /* Bid/Ask labels use blue/orange chart price lines; simulated spread disclosed in quote status. */
+
+/* Mobile terminal: compact MT5-inspired navigation and market watch */
+.quotes-view{background:#080b09;border:1px solid #202820;margin:0 0 14px;padding:12px}
+.quotes-view[hidden]{display:none}
+.quotes-view-head{display:flex;justify-content:space-between;align-items:center;padding:8px 5px 14px;font-size:10px;font-weight:800;letter-spacing:1px}
+.quotes-view-head small{font-size:8px;color:#8c9b8e}
+.quote-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 6px;border-bottom:1px solid #202820;cursor:pointer}
+.quote-item:active{background:#142018}
+.quote-symbol{font-size:13px;font-weight:800;color:#f2f4f2}
+.quote-sub{font-size:8px;color:#89958b;margin-top:5px}
+.quote-prices{display:flex;gap:10px;text-align:right;font-size:15px;font-weight:800}
+.quote-prices span{min-width:66px}
+.quote-bid{color:#5da6ff}.quote-ask{color:#ef6872}
+.mobile-terminal-nav{display:none}
+@media(max-width:700px){
+ body{padding-bottom:76px}
+ .preview-bar{font-size:8px;padding:9px 12px}
+ .terminal-wrap{width:100%;padding:10px 10px 20px}
+ .terminal-heading{display:none}
+ .terminal-account{margin:0 0 10px;background:#080b09;border-color:#202820}
+ .terminal-account>label,.terminal-account>div{padding:9px 8px}
+ .terminal-account small,.terminal-account label{font-size:6px;letter-spacing:.6px}
+ .terminal-account strong{font-size:14px}
+ .terminal-grid{gap:8px}
+ .chart-panel{padding:8px 5px;background:#080b09;border-color:#202820}
+ .chart-top{gap:5px;margin-bottom:5px}
+ .chart-top strong{font-size:17px}
+ .chart-top label,.chart-top small{font-size:7px}
+ .timeframes{gap:1px}
+ .timeframes button{font-size:8px;padding:5px}
+ #priceChart{height: min(62vh,520px);min-height:340px}
+ .order-panel{display:grid;grid-template-columns:1fr 1fr;padding:10px;gap:9px;background:#080b09}
+ .order-panel .panel-title,.order-buttons,.order-note{grid-column:1/-1}
+ .order-panel label{font-size:7px}
+ .order-panel input,.order-panel select{padding:9px 7px;font-size:10px}
+ .positions-panel{margin-top:8px;padding:10px;background:#080b09}
+ .positions-head h2{font-size:15px}
+ .mobile-terminal-nav{position:fixed;z-index:1000;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);padding:7px 3px calc(7px + env(safe-area-inset-bottom));background:#050605;border-top:1px solid #202820}
+ .mobile-terminal-nav button{display:grid;justify-items:center;gap:3px;background:transparent;border:0;color:#aeb5af;font:700 9px var(--font);padding:3px 0}
+ .mobile-terminal-nav button span{font-size:21px;line-height:22px}
+ .mobile-terminal-nav button.active{color:#5da6ff}
+ .quotes-view{background:#050605;border:0;padding:6px 8px}
+ .quote-item{padding:13px 4px}
+ .quote-prices{font-size:16px;gap:7px}
+}
