@@ -113,3 +113,9 @@ table[hidden]{display:none}
  body[data-mobile-view="messages"] .quotes-screen{display:block;min-height:45vh}
  body[data-mobile-view="messages"] .quotes-list:before{content:"No new messages";display:block;text-align:center;padding:70px 10px;color:#888;font-size:12px}
 }
+
+
+.order-level-layer{position:absolute;inset:0;z-index:20;pointer-events:none;overflow:hidden}
+.draggable-order-level{position:absolute;left:8px;right:48px;height:0;border-top:2px dashed;pointer-events:auto;touch-action:none;cursor:ns-resize;font:800 8px var(--font);text-shadow:0 1px 3px #000;padding:2px 5px;background:rgba(5,8,6,.72);width:max-content;max-width:85%;user-select:none}
+.draggable-order-level:after{content:"";position:absolute;left:0;right:0;top:-12px;height:24px}
+#priceChart{touch-action:pan-x pan-y}
