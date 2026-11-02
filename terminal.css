@@ -339,3 +339,6 @@ body[data-mobile-view="charts"] .mt-deal-strip{display:grid!important}
  body.order-ticket-open .mt-top-tools,
  body.order-ticket-open .mt-deal-strip{display:none!important}
 }
+
+/* Keep closed-trade history exclusively in the bottom History destination. */
+.trade-tabs [data-trade-tab="history"]{display:none!important}
