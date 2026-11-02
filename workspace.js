@@ -27,7 +27,8 @@ if(page==="terminal"){
  });
  document.getElementById("logoutBtn").addEventListener("click",()=>sessionStorage.removeItem("nexora_trading_login"));
 }
-\nconst labels = {dashboard:"Dashboard",terminal:"Trading terminal",challenge:"Challenge",activity:"Trading activity",payout:"Payouts",risk:"Risk limits",account:"My account"};
+
+const labels = {dashboard:"Dashboard",terminal:"Trading terminal",challenge:"Challenge",activity:"Trading activity",payout:"Payouts",risk:"Risk limits",account:"My account"};
 document.getElementById("pageLabel").textContent = labels[page] || "Workspace";
 document.querySelectorAll(".side-link[data-page]").forEach(link => { if(link.dataset.page===page) link.classList.add("active"); });
 document.getElementById("year").textContent = new Date().getFullYear();
