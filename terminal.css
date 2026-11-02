@@ -396,3 +396,41 @@ body[data-mobile-view="history"] #historyTable:not([hidden]){display:table!impor
  .history-summary div{padding:6px 0;font-size:13px}
  .history-summary b{font-size:14px}
 }
+
+
+/* MT-style Trade tab: account metrics first, live positions beneath. */
+.mt-trade-cards{display:block}
+.mt-trade-cards[hidden]{display:none!important}
+.mt-trade-empty{padding:22px 10px;text-align:center;color:#8e9a91;font-size:12px}
+.mt-position-card{padding:12px 10px;border-bottom:1px solid #29342d;background:#0a0e0b}
+.mt-position-line{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;font-size:14px}
+.mt-position-line>b:first-child{font-size:14px;color:#e8eee9}
+.mt-position-line strong{font-size:14px}
+.mt-position-line> b:last-child{font-size:16px}
+.mt-position-prices{display:flex;gap:16px;padding-top:5px;color:#aeb8b0;font-size:12px;font-weight:600}
+.mt-position-actions{display:flex;justify-content:flex-end;gap:7px;padding-top:8px}
+.mt-position-actions button{border:1px solid #34443a;border-radius:5px;background:#111a14;color:#b7c5ba;padding:6px 10px;font-size:10px}
+.account-overview{grid-template-columns:1fr!important;gap:0}
+.account-overview>div{display:flex!important;align-items:center;justify-content:space-between;border-right:0!important;border-bottom:1px solid #29342d!important;padding:10px 13px!important}
+.account-overview>div:last-child{border-bottom:0!important}
+.account-overview small{font-size:12px!important;letter-spacing:0!important;color:#d0d8d2!important}
+.account-overview b{font-size:15px!important}
+.account-overview>div small:after{content:"";display:inline-block;width:clamp(20px,20vw,130px);border-bottom:2px dotted #344038;margin:0 8px 3px}
+@media(max-width:700px){
+ body[data-mobile-view="trade"] .positions-panel{padding:0!important;border:0!important;background:transparent!important}
+ body[data-mobile-view="trade"] .positions-head{display:none!important}
+ body[data-mobile-view="trade"] .trade-tabs{display:grid!important;grid-template-columns:1fr 1fr;background:#111713;border-bottom:1px solid #354139}
+ body[data-mobile-view="trade"] .trade-tabs button{padding:13px 8px;font-size:13px}
+ body[data-mobile-view="trade"] .table-scroll{display:none!important}
+ body[data-mobile-view="trade"] .mt-trade-cards{display:block!important}
+ body[data-mobile-view="trade"] .mt-trade-cards[hidden]{display:none!important}
+ body[data-mobile-view="trade"] .account-overview{margin:8px 0 14px!important;background:#090d0a}
+ body[data-mobile-view="trade"] .account-overview>div{min-height:42px}
+ body[data-mobile-view="trade"] .account-overview small{font-size:13px!important;font-weight:700}
+ body[data-mobile-view="trade"] .account-overview b{font-size:15px!important;font-weight:800}
+ body[data-mobile-view="trade"] .mt-position-card{padding:14px 13px}
+ body[data-mobile-view="trade"] .mt-position-line{grid-template-columns:1fr auto;gap:8px}
+ body[data-mobile-view="trade"] .mt-position-line> b:last-child{grid-column:2;grid-row:1;font-size:16px}
+ body[data-mobile-view="trade"] .mt-position-line strong{justify-self:start}
+ body[data-mobile-view="trade"] .mt-position-prices{font-size:13px;padding-top:4px}
+}
