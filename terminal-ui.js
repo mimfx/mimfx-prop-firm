@@ -26,8 +26,14 @@ document.addEventListener("click",e=>{if(!e.target.closest("#quoteActions")&&!e.
 function setVolume(v){$("volume").value=v;$("quickVolume").value=v;$("topVolume").value=v;}
 $("topVolume")?.addEventListener("change",e=>setVolume(e.target.value));
 $("quickVolume")?.addEventListener("change",e=>setVolume(e.target.value));
-$("topBuy")?.addEventListener("click",()=>{if(window.nexoraExecuteMarketOrder)window.nexoraExecuteMarketOrder("BUY");});
-$("topSell")?.addEventListener("click",()=>{if(window.nexoraExecuteMarketOrder)window.nexoraExecuteMarketOrder("SELL");});
+window.nexoraExecuteMarketOrder=(side)=>{
+ const type=$("orderType"); type.value="market";type.dispatchEvent(new Event("change"));
+ const btn=$(side==="BUY"?"buyBtn":"sellBtn");
+ if(btn.disabled){alert("No fresh executable demo quote yet. Wait for the quote to update, then try again.");return;}
+ btn.click();
+};
+$("topBuy")?.addEventListener("click",()=>window.nexoraExecuteMarketOrder("BUY"));
+$("topSell")?.addEventListener("click",()=>window.nexoraExecuteMarketOrder("SELL"));
 function openTicket(type){$("orderType").value=type;$("orderType").dispatchEvent(new Event("change"));document.body.classList.add("order-ticket-open");renderOrderTabs();}
 function closeTicket(){document.body.classList.remove("order-ticket-open");}
 $("openOrderTicket")?.addEventListener("click",()=>openTicket($("orderType").value||"market"));
@@ -48,6 +54,12 @@ $("chartTools")?.addEventListener("click",()=>openTicket($("orderType").value||"
 function updateAccount(){const bal=Number(($("balance").textContent||"").replace(/[^0-9.-]/g,""))||0,flt=Number(($("openPnl").textContent||"").replace(/[^0-9.-]/g,""))||0,eq=bal+flt;let margin=0;document.querySelectorAll("#positionsBody tr").forEach(row=>{const cells=row.querySelectorAll("td");if(cells.length<9)return;const s=cells[0].textContent,vol=Number(cells[2].textContent),entry=Number(cells[3].textContent);const opt=all.find(x=>x.symbol===s),raw=opt?.symbol||"";const contract=/USD$/.test(raw)?100000:/JPY$/.test(raw)?100000:raw==="XAUUSD"?100:raw==="XAGUSD"?5000:1;margin+=Math.abs(entry*vol*contract)/100;});$("mtBalance").textContent=$("balance").textContent;$("mtEquity").textContent=$("equity").textContent;$("mtFloating").textContent=$("openPnl").textContent;$("mtFloating").classList.toggle("negative",flt<0);$("mtMargin").textContent="$"+margin.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});$("mtFreeMargin").textContent="$"+(eq-margin).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});$("topBid").textContent=$("quickBid").textContent;$("topAsk").textContent=$("quickAsk").textContent;}
 const observer=new MutationObserver(updateAccount);["balance","openPnl","equity","positionsBody","quickBid","quickAsk"].forEach(id=>{const el=$(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true});});
 setInterval(updateAccount,1000);
-document.querySelectorAll("[data-mobile-view]").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.mobileView==="trade"){$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});} }));
+document.querySelectorAll("[data-mobile-view]").forEach(b=>b.addEventListener("click",e=>{
+ e.preventDefault();e.stopImmediatePropagation();const view=b.dataset.mobileView;setNav(view);
+ if(view==="trade"){$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});}
+ if(view==="history"){document.querySelector('[data-trade-tab="history"]')?.click();$("accountOverview").scrollIntoView({block:"start",behavior:"smooth"});}
+ if(view==="charts"){$("terminalWorkspace").scrollIntoView({block:"start",behavior:"smooth"});}
+ if(view==="quotes"){$("quotesScreen").scrollIntoView({block:"start",behavior:"smooth"});}
+}));
 document.body.dataset.mobileView="charts";setNav("charts");renderOrderTabs();updateAccount();
 })();
